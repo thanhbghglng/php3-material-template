@@ -12,6 +12,14 @@ class Category extends Model
     protected $fillale=[
         'name',
         'parent_id',
+        'description',
         'status'
+       
     ];
+    public function parent(){
+        return $this->belongsTo(Category::class,'parent_id','id');
+    }
+    public function children(){
+        return $this->hasMany(Category::class,'parent_id','id');
+    }
 }

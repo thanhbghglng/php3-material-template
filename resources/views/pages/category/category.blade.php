@@ -12,7 +12,7 @@
             <p class="card-category"> Hiển thị tất cả các danh mục</p>
             
           </div>
-          <a class="btn" href="">Tạo danh mục</a>
+          <a class="btn" href="{{route('category.create')}}">Tạo danh mục</a>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table">
@@ -40,7 +40,7 @@
                       <td>{{$category->id}} </td>
                       <td>{{$category->name}}</td>
                       <td>{{$category->description}}</td>
-                      <td>{{$category->parent_id}}</td>
+                      <td>{{$category->parent->name}}</td>
                       <td>{{$category->status}}</td>
                       <td>
                         <form action="{{route('category.delete',$category->id)}} " method="POST" >
@@ -48,7 +48,7 @@
                           @csrf
                           <button type="submit" class="btn btn-danger">Xóa</button>
                         </form>
-                        <button class="btn btn-primary" >Sửa</button>
+                        <a href="{{route('category.edit',$category->id)}}" class="btn btn-primary" >Sửa</a>
                       </td>
                     </tr>
                   @endforeach
@@ -56,6 +56,7 @@
                 </tbody>
 
               </table>
+              {{$categories }}
             </div>
           </div>
         </div>
