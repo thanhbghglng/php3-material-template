@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 class HomeController extends Controller
 {
     /**
@@ -9,10 +9,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -21,6 +21,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $users = User::select('id','name','email','status')
+        ->paginate(15);
+        return view('dashboard',['users'=>$users]);
+    }
+    public function create(){
+        return view ('users.create');
+    }
+
+    public function delete(User $id){
+        if($id->delete()){
+            return redirect()->route('users.index');
+        }
     }
 }

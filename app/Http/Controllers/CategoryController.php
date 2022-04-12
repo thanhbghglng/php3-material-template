@@ -41,7 +41,7 @@ class CategoryController extends Controller
         $category= Category::select('id','name')
         ->where('id','!=',$id->id)
         ->get();
-        // dd($category);
+        // dd($category);  
         return view('pages.category.create',['category'=>$id,'category_parent'=>$category]);
     }
     public function update(Request $request,Category $id){

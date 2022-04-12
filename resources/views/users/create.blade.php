@@ -1,5 +1,5 @@
-@extends('layouts.app', ['activePage' => 'category', 'titlePage' => __('Danh mục')])
-@section('title_page','Category Page')
+@extends('layouts.app', ['activePage' => 'dashboard', 'titlePage' => __('Thành viên')])
+@section('title_page','User Page')
 @section('content')
 <div class="content">
   
@@ -9,33 +9,34 @@
           <div class="col-md-12">
             <div class="card card-plain">
               <div class="card-header card-header-primary">
-                <h4 class="card-title mt-0"> {{isset($category)?'Cập nhật danh mục':'Thêm mới danh mục'}}</h4>
+                <h4 class="card-title mt-0"> {{isset($users)?'Cập nhật thông tin thành viên ':'Thêm mới thành viên'}}</h4>
               </div>
               <div class="card-body ">
                     
-                        <form action= "{{isset($category)? route('category.update',$category->id): route('category.store')}}"method="POST">
+                        <form action= "{{isset($users)? route('users.update',$users->id): route('users.store')}}"method="POST">
                             @csrf
-                            @if (isset($category))
+                            @if (isset($users))
                                 @method('PUT')
                             @endif
                             <div class="form-group">
-                              <label >Tên danh mục</label>
-                              <input type="text" class="form-control" name="name" value="{{isset($category)? $category->name:''}}" >
+                              <label >Tên thành viên</label>
+                              <input type="text" class="form-control" name="name" value="{{isset($users)? $users->name:''}}" >
                             </div>
                             <div class="form-group">
-                                <label >Mô tả</label>
-                                <input type="text" class="form-control" name="description" value="{{isset($category) ? $category->description:''}}" >
+                                <label >Email</label>
+                                <input type="text" class="form-control" name="description" value="{{isset($users) ? $users->email:''}}" >
                               </div>
                             <div class="form-group ">
-                              <label >Danh mục cha</label>
-                              <select class="form-control col-lg-5 col-md-6 col-sm-3 " name="parent_id"   >
-                                @foreach ($category_parent as $parent_item)
-                                    <option value="{{$parent_item->id}}" {{isset($category) && $category->parent_id == $parent_item->id ? 'checked':''  }} >
-                                        {{$parent_item->name}}  
-                                    </option>
-                                @endforeach
-                                
-                              </select>
+                              <label >Ngày sinh</label>
+                                <input type="date" name="date_of_birth"  class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Mật khẩu</label>
+                                <input type="password" name="password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Nhập lại mật khẩu</label>
+                                <input type="password" name="password_confirm" class="form-control">
                             </div>
                             
                             <div class="form-group">
@@ -43,8 +44,8 @@
                             </div>
                             <div class="form-check form-check-radio">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="status"  value="1" {{isset($category)&& $category->status == 1 ? 'checked':''}} >
-                                   Hiển thị
+                                    <input class="form-check-input" type="radio" name="status"  value="1" {{isset($users)&& $users->status == 1 ? 'checked':''}} >
+                                   Hoạt động
                                     <span class="circle">
                                         <span class="check"></span>
                                     </span>
@@ -52,8 +53,8 @@
                             </div>
                             <div class="form-check form-check-radio">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="status"  value="0" {{isset($category)&& $category->status == 0 ? 'checked':''}}>
-                                    Ẩn
+                                    <input class="form-check-input" type="radio" name="status"  value="0" {{isset($users)&& $users->status == 0 ? 'checked':''}}>
+                                    Không hoạt động
                                     <span class="circle">
                                         <span class="check"></span>
                                     </span>

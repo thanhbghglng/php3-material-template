@@ -14,8 +14,35 @@ class UserController extends Controller
      * @param  \App\Models\User  $model
      * @return \Illuminate\View\View
      */
-    public function index(User $model)
+    // public function index(User $model)
+    // {
+    //     return view('users.index', ['users' => $model->paginate(15)]);
+    // }
+    public function index()
     {
-        return view('users.index', ['users' => $model->paginate(15)]);
+        $users = User::select('id','name','email','status')
+        ->paginate(15);
+        return view('dashboard',['users'=>$users]);
+    }
+    public function create(){
+        return view ('users.create');
+    }
+    public function store(Request $request){
+
+    }
+    public function edit( User $id){
+            $users= $id;
+        return view('users.create',['users'=>$users]);
+    }
+
+
+
+
+
+
+    public function delete(User $id){
+        if($id->delete()){
+            return redirect()->route('users.index');
+        }
     }
 }
