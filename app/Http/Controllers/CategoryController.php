@@ -55,9 +55,14 @@ class CategoryController extends Controller
             return redirect()->route('category.index');
           
     }
-    public function delete(Category $id){
-        if($id->delete()){
-            return redirect()->route('category.index');
-        }
+    public function delete(Request $request){
+       $category= Category::find($request->category_delete_id);
+       $category->delete();
+       return redirect()->route('category.index');
+    }
+    public function changeStatus(Request $request){
+       $category = Category::find($request->id);
+        $category->status = $request->status;
+        $category->save();
     }
 }

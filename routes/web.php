@@ -40,15 +40,15 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('/store',[CategoryController::class,'store'])->name('store');
 		Route::get('/edit/{id}',[CategoryController::class,'edit'])->name('edit');
 		Route::put('/update/{id}',[CategoryController::class,'update'])->name('update');
-
-		Route::delete('/delete/{id}',[CategoryController::class,'delete'])->name('delete');
+		Route::get('/changeStatus',[CategoryController::class,'changeStatus'])->name('changeStatus');
+		Route::post('/delete',[CategoryController::class,'delete'])->name('delete');
 	});
 	Route::prefix('product')->name('product.')->group(function () {
 		Route::get('/',[ProductController::class,'index'])->name('index');
 		Route::get('/create',[ProductController::class,'create'])->name('create');
 		Route::get('/edit/{id}',[ProductController::class,'edit'])->name('edit');
-		Route::delete('/delete/{id}',[ProductController::class,'delete'])->name('delete');
-
+		Route::post('/delete',[ProductController::class,'delete'])->name('delete');
+		Route::get('changeStatus',[ProductController::class,'changeStatus'])->name('changeStatus');
 	});
 
 	Route::prefix('users')->name('users.')->group(function(){
@@ -57,7 +57,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('/store',[UserController::class,'store'])->name('store');
 		Route::get('edit/{id}',[UserController::class,'edit'])->name('edit');
 		Route::put('update/{id}',[UserController::class,'update'])->name('update');
-		Route::delete('delete/{id}',[UserController::class,'delete'])->name('delete');
+		Route::post('/delete',[UserController::class,'delete'])->name('delete');
+		Route::get('changeStatus',[UserController::class,'changeStatus'])->name('changeStatus');
 	});
 	
 	

@@ -1,6 +1,32 @@
 @extends('layouts.app', ['activePage' => 'dashboard', 'titlePage' => __('Dashboard')])
 @section('title_page','Dash Board')
 @section('content')
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="{{route('users.delete')}} " method="POST">
+        @csrf
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Xóa thành viên</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="user_delete_id" id="user_id">
+            Bạn có chắc chắn muốn xóa?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
   <div class="content">
     <div class="container-fluid">
       <div class="row">
@@ -39,17 +65,13 @@
                           <td>
                             <div class="togglebutton">
                               <label>
-                                <input type="checkbox" {{$user->status==1? 'checked':''}} >
+                                <input data-id="{{$user->id}}" class="toggle-class"  type="checkbox" {{$user->status==true? 'checked':''}} >
                                   <span class="toggle"></span>
                               </label>
                             </div>
                          </td>
                           <td>
-                            <form action="{{route('users.delete',$user->id)}} " method="POST" >
-                              @method('DELETE')
-                              @csrf
-                              <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa ?')" class="btn btn-danger">Xóa</button>
-                            </form>
+                            <button type="button" class="btn btn-danger deleteUser" value="{{$user->id}} ">Xóa</button>
                             <a href="{{route('users.edit',$user->id)}}" class="btn btn-primary" >Sửa</a>
                           </td>
 
@@ -78,3 +100,45 @@
     });
   </script>
 @endpush
+
+@section('scripts')
+    <script>
+      $(document).ready(function(){
+        $('.deleteUser').click(function(e){
+          e.preventDefault();
+          var user_id = $(this).val();
+          $('#user_id').val(user_id);
+          $('#deleteModal').modal('show');
+        });
+      });
+
+     
+     
+    </script>
+    
+    <script>
+     
+      $(function(){
+       $('.toggle-class').on('change',  function(){
+       var status = $(this).prop('checked')== true ? 1 : 0;
+       console.log(status)
+       var user_id = $(this).data('id');
+       console.log(user_id)
+        $.ajax({
+          type:"GET",
+          dataType: "JSON",
+          url:'{{route("users.changeStatus")}}',
+          data:{
+            "status":status,
+            "id":user_id
+          },
+          success:function(data){
+            console.log(data.success);
+          }
+        })
+      
+      });
+    });
+
+    </script>
+@endsection

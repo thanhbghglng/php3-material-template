@@ -21,9 +21,14 @@ class ProductController extends Controller
         $product= $id;
         return view('pages.product.create',['product'=>$product]);
     }
-    public function delete(Product $id){
-        if($id->delete()){
-            return redirect()->route('product.index');
-        }
+    public function delete(Request $request){
+        $product= Product::find($request->product_delete_id);
+       $product->delete();
+       return redirect()->route('product.index');
+    }
+    public function changeStatus(Request $request){
+        $product = Product::find($request->id);
+        $product->status = $request->status;
+        $product->save();
     }
 }

@@ -34,15 +34,20 @@ class UserController extends Controller
             $users= $id;
         return view('users.create',['users'=>$users]);
     }
+    public function changeStatus(Request $request){
+        $users = User::find($request->id);
+         $users->status = $request->status;
+         $users->save();
+     }
 
 
 
 
 
-
-    public function delete(User $id){
-        if($id->delete()){
-            return redirect()->route('users.index');
-        }
+    public function delete(Request $request){
+        $users= User::find($request->user_delete_id);
+        $users->delete();
+        return redirect()->route('users.index');
     }
+  
 }

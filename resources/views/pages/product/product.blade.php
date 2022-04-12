@@ -1,6 +1,33 @@
 @extends('layouts.app', ['activePage' => 'product', 'titlePage' => __('Product Page')])
 @section('title_page','Products  Page')
 @section('content')
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="{{route('product.delete')}} " method="POST">
+        @csrf
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="product_delete_id" id="product_id">
+            Bạn có chắc chắn muốn xóa?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <div class="content">
     {{-- {{dd($products)}} --}}
     <div class="content-fluid">
@@ -49,18 +76,16 @@
                                         <td> {{$product->price}} </td>
                                         <td> <img src="{{$product->image_url}}" alt="" width="200"> </td>
                                         <td> {{$product->categories->name}} </td>
-                                        <td>  <div class="togglebutton">
-                                            <label>
-                                              <input type="checkbox" {{$product->status==1? 'checked':''}} >
-                                                <span class="toggle"></span>
-                                            </label>
-                                          </div> </td>
+                                        <td>  
+                                          <div class="togglebutton">
+                                          <label>
+                                            <input data-id="{{$product->id}}" class="toggle-class"  type="checkbox" {{$product->status==true? 'checked':''}} >
+                                              <span class="toggle"></span>
+                                          </label>
+                                        </div>
+                                       </td>
                                         <td>
-                                            <form action="{{route('product.delete',$product->id)}} " method="POST" >
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger">Xóa</button>
-                                              </form>
+                                          <button type="button" class="btn btn-danger deleteProduct" value="{{$product->id}} ">Xóa</button>
                                               <a href="{{route('product.edit',$product->id)}}" class="btn btn-primary" >Sửa</a>
                                         </td>
 
@@ -79,4 +104,43 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+    <script>
+      $(document).ready(function(){
+        $('.deleteProduct').click(function(e){
+          e.preventDefault();
+          var category_id = $(this).val();
+          $('#product_id').val(category_id);
+          $('#deleteModal').modal('show');
+        });
+      });
+
+     
+     
+    </script>
+    
+    <script>
+     
+      $(function(){
+       $('.toggle-class').on('change',  function(){
+       var status = $(this).prop('checked')== true ? 1 : 0;
+       var product_id = $(this).data('id');
+        $.ajax({
+          type:"GET",
+          dataType: "JSON",
+          url:'{{route("product.changeStatus")}}',
+          data:{
+            "status":status,
+            "id":product_id
+          },
+          success:function(data){
+            console.log(data.success);
+          }
+        })
+      
+      });
+    });
+
+    </script>
 @endsection

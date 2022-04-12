@@ -5,20 +5,24 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Thong bao </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="text" name="category_delete_id" id="category_id">
-        Bạn có chắc chắn muốn xóa ?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      <form action="{{route('category.delete')}} " method="POST">
+        @csrf
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Xóa danh mục</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="category_delete_id" id="category_id">
+            Bạn có chắc chắn muốn xóa?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+          </div>
+      </form>
     </div>
   </div>
 </div>
@@ -40,7 +44,7 @@
           <a class="btn"  href="{{route('category.create')}}">Tạo danh mục</a>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table">
+              <table class="table table" id='category_table'>
                 <thead class="">
                   <th>
                     ID
@@ -69,15 +73,14 @@
                       <td>
                         <div class="togglebutton">
                           <label>
-                            <input type="checkbox" {{$category->status==1? 'checked':''}} >
+                            <input data-id="{{$category->id}}" class="toggle-class"  type="checkbox" {{$category->status==true? 'checked':''}} >
                               <span class="toggle"></span>
                           </label>
                         </div>
                      </td>
                       <td>
                        
-                          <button type="button" class="btn btn-danger" id="deleteCategory" value="{{$category->id}}">Xóa</button>
-                      
+                        <button type="button" class="btn btn-danger deleteCategory" value="{{$category->id}} ">Xóa</button>
                         <a href="{{route('category.edit',$category->id)}}" class="btn btn-primary" >Sửa</a>
                       </td>
                     </tr>
@@ -96,4 +99,43 @@
     </div>
   </div>
 </div>
+@endsection
+@section('scripts')
+    <script>
+      $(document).ready(function(){
+        $('.deleteCategory').click(function(e){
+          e.preventDefault();
+          var category_id = $(this).val();
+          $('#category_id').val(category_id);
+          $('#deleteModal').modal('show');
+        });
+      });
+
+     
+     
+    </script>
+    
+    <script>
+     
+      $(function(){
+       $('.toggle-class').on('change',  function(){
+       var status = $(this).prop('checked')== true ? 1 : 0;
+       var category_id = $(this).data('id');
+        $.ajax({
+          type:"GET",
+          dataType: "JSON",
+          url:'{{route("category.changeStatus")}}',
+          data:{
+            "status":status,
+            "id":category_id
+          },
+          success:function(data){
+            console.log(data.success);
+          }
+        })
+      
+      });
+    });
+
+    </script>
 @endsection
