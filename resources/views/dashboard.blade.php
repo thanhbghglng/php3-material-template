@@ -1,7 +1,7 @@
 @extends('layouts.app', ['activePage' => 'dashboard', 'titlePage' => __('Dashboard')])
 @section('title_page','Dash Board')
 @section('content')
-
+    
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -40,8 +40,8 @@
             </button>
           </div>
           <div class="modal-body">
-            <input type="text" name="status" id="status">
-            <input type="text" name="id" id="user_id_status">
+            <input type="hidden" name="status" id="status">
+            <input type="hidden" name="id" id="user_id_status">
             Bạn có chắc chắn muốn thay đổi
           </div>
           <div class="modal-footer">
@@ -98,7 +98,12 @@
                             </div>
                          </td>
                           <td>
-                            <button type="button" class="btn btn-danger deleteUser" value="{{$user->id}} ">Xóa</button>
+                            <button type="button" class="btn btn-danger deleteUser" value="{{$user->id}} " 
+                              @if ($user->id == Auth::id())
+                                disabled
+                              @endif)
+                              
+                            >Xóa</button>
                             <a href="{{route('users.edit',$user->id)}}" class="btn btn-primary" >Sửa</a>
                           </td>
 

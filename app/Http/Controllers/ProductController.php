@@ -22,6 +22,12 @@ class ProductController extends Controller
         return view('pages.product.create',['category'=>$category]);
     }
     public function store (Request $request){
+        $request->validate([
+            'name' => 'required',
+            'price'=>'required',
+            
+            
+        ]);
         $product = new Product();
         $product->fill($request->all());
         if($request->hasFile('image_url')){
@@ -46,6 +52,12 @@ class ProductController extends Controller
         return view('pages.product.create',['product'=>$product,'category'=>$category]);
     }
     public function update(Request $request,Product $id){
+        $request->validate([
+            'name' => 'required',
+            'price'=>'required',
+            
+            
+        ]);
         $product = $id;
         $product->name = $request->name;
         $product->description = $request->description;

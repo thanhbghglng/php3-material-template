@@ -28,12 +28,20 @@ class CategoryController extends Controller
         return view('pages.category.create',['category_parent'=>$category]);
     }
     public function store(Request $request){
+
+        $request->validate([
+            'name' => 'required',
+
+        ]);
         $categoryRequest = $request->all();
         $categories= new Category();
         $categories->name = $categoryRequest['name'];
         $categories->description = $categoryRequest['description'];
         $categories->parent_id = $categoryRequest['parent_id'];
-        $categories->status = $categoryRequest['status'];
+        if ($request['status']) {
+            $categories->status = $categoryRequest['status'];
+            
+        }
         // dd($categories);
         $categories->save();
         return redirect()->route('category.index');
@@ -47,6 +55,10 @@ class CategoryController extends Controller
         return view('pages.category.create',['category'=>$id,'category_parent'=>$category]);
     }
     public function update(Request $request,Category $id){
+        $request->validate([
+            'name' => 'required',
+            
+        ]);
             $categories = $id;
             $categories->name = $request->name;
             $categories->description = $request->description;

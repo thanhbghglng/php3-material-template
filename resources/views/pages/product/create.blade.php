@@ -21,6 +21,9 @@
                               <label >Tên sản phẩm</label>
                               <input type="text" class="form-control" name='name' value='{{isset($product) ? $product->name  : ''}} '>
                             </div>
+                            @error('name')
+                                <div class="alert alert-danger">{{$message}}</div>
+                            @enderror
                             <div class="form-group">
                               <label >Mô tả</label>
                               <input type="text" class="form-control" name='description' value='{{isset($product) ? $product->description  : ''}} '>
@@ -29,6 +32,9 @@
                               <label >Giá</label>
                               <input type="text" class="form-control" name='price' value='{{isset($product) ? $product->price  : ''}} '>
                             </div>
+                            @error('price')
+                                <div class="alert alert-danger">{{$message}}</div>
+                            @enderror
                             <div class="form-group">
                               <label >Ảnh</label>
                               <input type="file" class="form-control" name='image_url'  >
@@ -38,8 +44,8 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                               
                               <div class="fileinput fileinput-new text-center">
-                                   
-                                  
+
+                                    <img src=" {{isset($product) ? asset($product->image_url) :"" }} " alt="">
                                       <input type="file" name="image_url" value="{{isset($product)? $product->image_url:''}}" />
                                   
                                  

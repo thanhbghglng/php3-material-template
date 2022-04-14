@@ -20,14 +20,18 @@
                               <label >Tên danh mục</label>
                               <input type="text" class="form-control" name="name" value="{{isset($category)? $category->name:''}}" >
                             </div>
+                            @error('name')
+                                <div class="alert alert-danger">{{$message}}</div>
+                            @enderror
                             <div class="form-group">
                                 <label >Mô tả</label>
                                 <input type="text" class="form-control" name="description" value="{{isset($category) ? $category->description:''}}" >
                               </div>
                             <div class="form-group ">
                               <label >Danh mục cha</label>
+                              
                               <select class="form-control col-lg-5 col-md-6 col-sm-3 " name="parent_id"   >
-                                <option value="0">--None--</option>
+                                <option value="">--None--</option>
                                
                                 @foreach ($category_parent as $item)
                                 
