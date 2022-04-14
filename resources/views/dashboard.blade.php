@@ -27,6 +27,33 @@
   </div>
 </div>
 
+{{-- changeStatus --}}
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="{{route('users.changeStatus')}} " method="POST">
+        @csrf
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Thay đổi trạng thái</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="text" name="status" id="status">
+            <input type="text" name="id" id="user_id_status">
+            Bạn có chắc chắn muốn thay đổi
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
   <div class="content">
     <div class="container-fluid">
       <div class="row">
@@ -65,7 +92,7 @@
                           <td>
                             <div class="togglebutton">
                               <label>
-                                <input data-id="{{$user->id}}" class="toggle-class"  type="checkbox" {{$user->status==true? 'checked':''}} >
+                                <input data-id="{{$user->id}}" class="toggle-class changeStatus " id="changeStatusUser"  type="checkbox" {{$user->status==true? 'checked':''}} >
                                   <span class="toggle"></span>
                               </label>
                             </div>
@@ -117,28 +144,38 @@
     </script>
     
     <script>
-     
-      $(function(){
-       $('.toggle-class').on('change',  function(){
-       var status = $(this).prop('checked')== true ? 1 : 0;
-       console.log(status)
-       var user_id = $(this).data('id');
-       console.log(user_id)
-        $.ajax({
-          type:"GET",
-          dataType: "JSON",
-          url:'{{route("users.changeStatus")}}',
-          data:{
-            "status":status,
-            "id":user_id
-          },
-          success:function(data){
-            console.log(data.success);
-          }
-        })
-      
+        $(document).ready(function(){
+        $('.changeStatus').click(function(e){
+          e.preventDefault();
+          var user_id = $(this).data('id');
+          var status = $(this).prop('checked')== true ? 1 : 0;
+          $('#status').val(status);
+          $('#user_id_status').val(user_id);
+          $('#changeModal').modal('show');
+        });
       });
-    });
+     
+      
+    //    $('.toggle-class').on('change',  function(){
+    //    var status = $(this).prop('checked')== true ? 1 : 0;
+    //    console.log(status)
+    //    var user_id = $(this).data('id');
+    //    console.log(user_id)
+    //     $.ajax({
+    //       type:"GET",
+    //       dataType: "JSON",
+    //       url:'{{route("users.changeStatus")}}',
+    //       data:{
+    //         "status":status,
+    //         "id":user_id
+    //       },
+    //       success:function(data){
+    //         console.log(data.success);
+    //       }
+    //     })
+      
+    //   });
+    // });
 
     </script>
 @endsection

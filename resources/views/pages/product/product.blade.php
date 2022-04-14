@@ -26,7 +26,32 @@
     </div>
   </div>
 </div>
+{{-- changeStatus --}}
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="{{route('product.changeStatus')}} " method="POST">
+        @csrf
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Thay đổi trạng thái</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="status" id="status">
+            <input type="hidden" name="id" id="product_id_status">
+            Bạn có chắc chắn muốn thay đổi ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
 
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div class="content">
     {{-- {{dd($products)}} --}}
@@ -74,12 +99,13 @@
                                         <td> {{$product->name}} </td>
                                         <td> {{$product->description}} </td>
                                         <td> {{$product->price}} </td>
-                                        <td> <img src="{{$product->image_url}}" alt="" width="200"> </td>
-                                        <td> {{$product->categories->name}} </td>
+                                        <td> <img src="{{asset($product->image_url)}}" alt="" width="200"> </td>
+                                        <td>{{isset($product->categories)?$product->categories->name:"" }}
+                                           </td>
                                         <td>  
                                           <div class="togglebutton">
                                           <label>
-                                            <input data-id="{{$product->id}}" class="toggle-class"  type="checkbox" {{$product->status==true? 'checked':''}} >
+                                            <input data-id="{{$product->id}}" class="toggle-class changeStatus"  type="checkbox" {{$product->status==true? 'checked':''}} >
                                               <span class="toggle"></span>
                                           </label>
                                         </div>
@@ -121,26 +147,37 @@
     </script>
     
     <script>
-     
-      $(function(){
-       $('.toggle-class').on('change',  function(){
-       var status = $(this).prop('checked')== true ? 1 : 0;
-       var product_id = $(this).data('id');
-        $.ajax({
-          type:"GET",
-          dataType: "JSON",
-          url:'{{route("product.changeStatus")}}',
-          data:{
-            "status":status,
-            "id":product_id
-          },
-          success:function(data){
-            console.log(data.success);
-          }
-        })
-      
+
+$(document).ready(function(){
+        $('.changeStatus').click(function(e){
+          e.preventDefault();
+          var status = $(this).prop('checked')== true ? 1 : 0;
+          var id = $(this).data('id');
+          $('#status').val(status)
+          $('#product_id_status').val(id);
+          $('#changeModal').modal('show');
+        });
       });
-    });
+     
+    //   $(function(){
+    //    $('.toggle-class').on('change',  function(){
+    //    var status = $(this).prop('checked')== true ? 1 : 0;
+    //    var product_id = $(this).data('id');
+    //     $.ajax({
+    //       type:"GET",
+    //       dataType: "JSON",
+    //       url:'{{route("product.changeStatus")}}',
+    //       data:{
+    //         "status":status,
+    //         "id":product_id
+    //       },
+    //       success:function(data){
+    //         console.log(data.success);
+    //       }
+    //     })
+      
+    //   });
+    // });
 
     </script>
 @endsection

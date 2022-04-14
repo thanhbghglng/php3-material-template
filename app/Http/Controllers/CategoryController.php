@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
+
 class CategoryController extends Controller
 {
     public function index(){
@@ -57,12 +59,21 @@ class CategoryController extends Controller
     }
     public function delete(Request $request){
        $category= Category::find($request->category_delete_id);
+       $product = Product::select('id','name','status','category_id')
+       ->where('category_id','=',$category->id)
+       ->get();
+        foreach ($product as $item) {
+            $item->status  = 0;
+            
+        }
        $category->delete();
-       return redirect()->route('category.index');
+       return redirect()->back();
     }
     public function changeStatus(Request $request){
-       $category = Category::find($request->id);
+       $category = Category::find($request->category_id);
+
         $category->status = $request->status;
         $category->save();
+        return redirect()->back();
     }
 }

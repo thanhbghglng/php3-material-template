@@ -2,10 +2,8 @@
 @section('title_page','Category Page')
 @section('content')
 <div class="content">
-  
     <div class="container-fluid">
         <div class="row">
-          
           <div class="col-md-12">
             <div class="card card-plain">
               <div class="card-header card-header-primary">
@@ -29,10 +27,11 @@
                             <div class="form-group ">
                               <label >Danh mục cha</label>
                               <select class="form-control col-lg-5 col-md-6 col-sm-3 " name="parent_id"   >
-                                @foreach ($category_parent as $parent_item)
-                                    <option value="{{$parent_item->id}}" {{isset($category) && $category->parent_id == $parent_item->id ? 'checked':''  }} >
-                                        {{$parent_item->name}}  
-                                    </option>
+                                <option value="0">--None--</option>
+                               
+                                @foreach ($category_parent as $item)
+                                
+                                <option value="{{$item->id}}"  {{ isset($category) && $category->parent_id ==  $item->id ? 'selected   ':" "   }} >{{$item->name}}</option>
                                 @endforeach
                                 
                               </select>
